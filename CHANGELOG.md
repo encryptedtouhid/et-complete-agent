@@ -6,6 +6,31 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-05-23
+
+### Changed
+- **Generated project namespaces and folders renamed** from `ET.<Name>.*`
+  to `EncryptedTouhid.<Name>.*` to match the NuGet package id introduced in
+  0.2.0. A `dotnet new et-complete-agent -n MyAgent` now produces
+  `src/EncryptedTouhid.MyAgent.Domain`, `EncryptedTouhid.MyAgent.Application`,
+  and so on. The short name (`et-complete-agent`), VS title, sourceName
+  template token (`CompleteAgent`), and the actual code structure are
+  otherwise identical to 0.2.0.
+- OpenTelemetry `ActivitySource` and `Meter` names changed from
+  `ET.CompleteAgent` to `EncryptedTouhid.CompleteAgent`. Existing dashboards
+  filtering on the old name need updating.
+
+### Added
+- **Tracked git hooks under `.githooks/`** with `scripts/install-hooks.sh`
+  to activate them. `pre-commit` runs three gates in fail-fast order:
+  `dotnet format --verify-no-changes` against the template source, then
+  `dotnet pack` of the template package, then install + `dotnet new` +
+  build + test on a generated sample. Bypass with `git commit --no-verify`
+  when you really must.
+- Auto-applied `dotnet format` pass across the entire template source —
+  95 files now conform to canonical .NET style (no manual alignment
+  spaces, consistent indentation, final newlines).
+
 ## [0.2.0] — 2026-05-23
 
 ### Changed
@@ -127,7 +152,8 @@ All notable changes to this template are documented here. The format follows
   (read-only FS, dropped caps, three probes), Service, HPA, NetworkPolicy,
   optional Aspire Dashboard, Kustomization.
 
-[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/EncryptedTouhid/et-complete-agent/releases/tag/v0.1.0

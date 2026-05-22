@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <RootNamespace>ET.CompleteAgent.Domain</RootNamespace>
-    <AssemblyName>ET.CompleteAgent.Domain</AssemblyName>
-  </PropertyGroup>
-
-</Project>

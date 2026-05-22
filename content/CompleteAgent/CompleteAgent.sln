@@ -6,15 +6,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A1A1A1A1-111
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B2B2B2B2-2222-2222-2222-222222222222}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ET.CompleteAgent.Domain", "src\ET.CompleteAgent.Domain\ET.CompleteAgent.Domain.csproj", "{C3C3C3C3-3333-3333-3333-333333333333}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedTouhid.CompleteAgent.Domain", "src\EncryptedTouhid.CompleteAgent.Domain\EncryptedTouhid.CompleteAgent.Domain.csproj", "{C3C3C3C3-3333-3333-3333-333333333333}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ET.CompleteAgent.Application", "src\ET.CompleteAgent.Application\ET.CompleteAgent.Application.csproj", "{D4D4D4D4-4444-4444-4444-444444444444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedTouhid.CompleteAgent.Application", "src\EncryptedTouhid.CompleteAgent.Application\EncryptedTouhid.CompleteAgent.Application.csproj", "{D4D4D4D4-4444-4444-4444-444444444444}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ET.CompleteAgent.Infrastructure", "src\ET.CompleteAgent.Infrastructure\ET.CompleteAgent.Infrastructure.csproj", "{E5E5E5E5-5555-5555-5555-555555555555}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedTouhid.CompleteAgent.Infrastructure", "src\EncryptedTouhid.CompleteAgent.Infrastructure\EncryptedTouhid.CompleteAgent.Infrastructure.csproj", "{E5E5E5E5-5555-5555-5555-555555555555}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ET.CompleteAgent.Host", "src\ET.CompleteAgent.Host\ET.CompleteAgent.Host.csproj", "{F6F6F6F6-6666-6666-6666-666666666666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedTouhid.CompleteAgent.Host", "src\EncryptedTouhid.CompleteAgent.Host\EncryptedTouhid.CompleteAgent.Host.csproj", "{F6F6F6F6-6666-6666-6666-666666666666}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ET.CompleteAgent.Application.Tests", "tests\ET.CompleteAgent.Application.Tests\ET.CompleteAgent.Application.Tests.csproj", "{A7A7A7A7-7777-7777-7777-777777777777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedTouhid.CompleteAgent.Application.Tests", "tests\EncryptedTouhid.CompleteAgent.Application.Tests\EncryptedTouhid.CompleteAgent.Application.Tests.csproj", "{A7A7A7A7-7777-7777-7777-777777777777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

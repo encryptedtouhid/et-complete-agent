@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Pre-commit hook for the template repo.
+#
+# Three gates, in fail-fast order:
+#   1. dotnet format --verify-no-changes
+#        Whitespace, .editorconfig style rules, IDE / Sonar / Security analyzers.
+#        Fastest signal; fail here for the cheapest class of issues.
+#   2. dotnet pack
+#        Verify the template itself packs into a valid nupkg.
+#   3. install -> dotnet new -> build -> test
+#        Full smoke test of a generated project.
+#
+# Activate per-clone:   git config core.hooksPath .githooks
+# Or run:               ./scripts/install-hooks.sh
+# Bypass (use sparingly): git commit --no-verify
+
+set -euo pipefail
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+
+ARTIFACTS=".hook-artifacts"
+SMOKE_DIR=$(mktemp -d -t completeagent-precommit.XXXXXX)
+trap 'rm -rf "$ARTIFACTS" "$SMOKE_DIR"' EXIT
+
+echo "▶ [1/3] dotnet format --verify-no-changes (template source)"
+(
+    cd content/CompleteAgent
+    dotnet restore --nologo -v quiet >/dev/null
+    dotnet format --verify-no-changes --no-restore --verbosity diagnostic >/tmp/.fmt.log 2>&1 || {
+        echo "✗ formatting drift detected:"
+        tail -50 /tmp/.fmt.log
+        exit 1
+    }
+)
+
+echo "▶ [2/3] dotnet pack"
+rm -rf "$ARTIFACTS"
+dotnet pack -c Release -o "$ARTIFACTS" --nologo -v quiet >/dev/null
+
+NUPKG=$(ls "$ARTIFACTS"/EncryptedTouhid.AgentFramework.Templates.*.nupkg | head -1)
+if [ -z "$NUPKG" ]; then
+    echo "✗ no nupkg produced"
+    exit 1
+fi
+
+echo "▶ [3/3] install template, generate sample, build, test"
+dotnet new uninstall EncryptedTouhid.AgentFramework.Templates >/dev/null 2>&1 || true
+dotnet new install "$NUPKG" --force >/dev/null
+dotnet new et-complete-agent -n SmokeTest -o "$SMOKE_DIR" --no-restore >/dev/null
+(
+    cd "$SMOKE_DIR"
+    dotnet build -c Release --nologo -v quiet >/dev/null
+    dotnet test --no-build -c Release --nologo -v quiet >/dev/null
+)
+
+echo "✓ format + pack + smoke (build + test) all clean"

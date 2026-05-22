@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>EncryptedTouhid.CompleteAgent.Domain</RootNamespace>
+    <AssemblyName>EncryptedTouhid.CompleteAgent.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>

@@ -31,15 +31,15 @@ cd CompleteAgent
 
 # 3. Set a provider + API key (Azure OpenAI shown below)
 dotnet user-secrets set "Agent:AzureOpenAI:Endpoint" "https://<resource>.openai.azure.com" \
-    --project src/ET.CompleteAgent.Host
+    --project src/EncryptedTouhid.CompleteAgent.Host
 az login   # DefaultAzureCredential picks this up
 
 # 4. Set an API key for your agent endpoint
 dotnet user-secrets set "Authentication:ApiKey" "$(openssl rand -hex 16)" \
-    --project src/ET.CompleteAgent.Host
+    --project src/EncryptedTouhid.CompleteAgent.Host
 
 # 5. Run
-dotnet run --project src/ET.CompleteAgent.Host
+dotnet run --project src/EncryptedTouhid.CompleteAgent.Host
 ```
 
 ```bash
@@ -61,15 +61,15 @@ CompleteAgent/
 ├── docker-compose.yml                        Agent + Redis + Qdrant for local dev
 ├── deploy/k8s/                               Namespace, Deployment, HPA, NetworkPolicy, ...
 ├── src/
-│   ├── ET.CompleteAgent.Domain/                    Contracts, value records (zero deps)
-│   ├── ET.CompleteAgent.Application/               Runner, tools, workflows, sanitiser, retry
-│   ├── ET.CompleteAgent.Infrastructure/            LLM client, EF Core, Qdrant, moderation
-│   └── ET.CompleteAgent.Host/                      Program.cs, endpoints, auth, telemetry
+│   ├── EncryptedTouhid.CompleteAgent.Domain/                    Contracts, value records (zero deps)
+│   ├── EncryptedTouhid.CompleteAgent.Application/               Runner, tools, workflows, sanitiser, retry
+│   ├── EncryptedTouhid.CompleteAgent.Infrastructure/            LLM client, EF Core, Qdrant, moderation
+│   └── EncryptedTouhid.CompleteAgent.Host/                      Program.cs, endpoints, auth, telemetry
 └── tests/
-    └── ET.CompleteAgent.Application.Tests/         xUnit + NSubstitute + FakeTimeProvider
+    └── EncryptedTouhid.CompleteAgent.Application.Tests/         xUnit + NSubstitute + FakeTimeProvider
 ```
 
-All assemblies use the `ET.<ProjectName>.*` namespace convention. The `ET.` prefix is the org marker and stays fixed; the middle segment is whatever you pass to `dotnet new -n`.
+All assemblies use the `EncryptedTouhid.<ProjectName>.*` namespace convention. The `EncryptedTouhid.` prefix is the org marker and stays fixed; the middle segment is whatever you pass to `dotnet new -n`.
 
 ---
 

@@ -2,15 +2,15 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "Directory.Packages.props", "global.json", "./"]
-COPY ["src/ET.CompleteAgent.Domain/ET.CompleteAgent.Domain.csproj", "src/ET.CompleteAgent.Domain/"]
-COPY ["src/ET.CompleteAgent.Application/ET.CompleteAgent.Application.csproj", "src/ET.CompleteAgent.Application/"]
-COPY ["src/ET.CompleteAgent.Infrastructure/ET.CompleteAgent.Infrastructure.csproj", "src/ET.CompleteAgent.Infrastructure/"]
-COPY ["src/ET.CompleteAgent.Host/ET.CompleteAgent.Host.csproj", "src/ET.CompleteAgent.Host/"]
-RUN dotnet restore "src/ET.CompleteAgent.Host/ET.CompleteAgent.Host.csproj"
+COPY ["src/EncryptedTouhid.CompleteAgent.Domain/EncryptedTouhid.CompleteAgent.Domain.csproj", "src/EncryptedTouhid.CompleteAgent.Domain/"]
+COPY ["src/EncryptedTouhid.CompleteAgent.Application/EncryptedTouhid.CompleteAgent.Application.csproj", "src/EncryptedTouhid.CompleteAgent.Application/"]
+COPY ["src/EncryptedTouhid.CompleteAgent.Infrastructure/EncryptedTouhid.CompleteAgent.Infrastructure.csproj", "src/EncryptedTouhid.CompleteAgent.Infrastructure/"]
+COPY ["src/EncryptedTouhid.CompleteAgent.Host/EncryptedTouhid.CompleteAgent.Host.csproj", "src/EncryptedTouhid.CompleteAgent.Host/"]
+RUN dotnet restore "src/EncryptedTouhid.CompleteAgent.Host/EncryptedTouhid.CompleteAgent.Host.csproj"
 
 COPY . .
-WORKDIR /src/src/ET.CompleteAgent.Host
-RUN dotnet publish "ET.CompleteAgent.Host.csproj" \
+WORKDIR /src/src/EncryptedTouhid.CompleteAgent.Host
+RUN dotnet publish "EncryptedTouhid.CompleteAgent.Host.csproj" \
     -c Release \
     -o /app/publish \
     --no-restore \
@@ -27,4 +27,4 @@ ENV ASPNETCORE_URLS=http://+:8080 \
 
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "ET.CompleteAgent.Host.dll"]
+ENTRYPOINT ["dotnet", "EncryptedTouhid.CompleteAgent.Host.dll"]
