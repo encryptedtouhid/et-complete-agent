@@ -6,6 +6,23 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Security headers middleware (HSTS, X-Content-Type-Options, X-Frame-Options,
+  Referrer-Policy, Permissions-Policy, Content-Security-Policy). HSTS only
+  emits over HTTPS; all settings tunable via `SecurityHeaders` config.
+- Configurable CORS named policy `AgentCors`; disabled by default,
+  allow-list driven via `Cors:AllowedOrigins`.
+- Idempotency keys via `Idempotency-Key` header on `/agent/run`,
+  `/agent/classify`, `/agent/workflow/research`. Responses cached per
+  (subject, path, key, body-hash) with 10-minute default TTL. Replays carry
+  an `Idempotency-Replay: true` header.
+- Append-only audit log via `IAuditLog` — `NoOpAuditLog` default; EF Core
+  implementation auto-enabled when `Persistence:ConversationStore=Sqlite`.
+- Repo-health files: CHANGELOG, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT,
+  GitHub issue / PR templates, README badges.
+- Architecture decision records (`docs/adr/0001..0003`).
+- Operational runbook (`docs/runbook.md`).
+
 ## [0.1.0] — 2026-05-23
 
 ### Added
