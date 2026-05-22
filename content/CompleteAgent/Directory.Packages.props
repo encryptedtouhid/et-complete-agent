@@ -20,6 +20,7 @@
 
     <!-- Hosting & config -->
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.8" />
@@ -51,7 +52,17 @@
 
     <!-- Persistence -->
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.46.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.2.1" />
+
+    <!-- Transitive overrides — pin to non-vulnerable versions pulled in by Cosmos / Mongo / Testcontainers. -->
+    <PackageVersion Include="Snappier" Version="1.3.1" />
+    <PackageVersion Include="SharpCompress" Version="1.0.0" />
 
     <!-- Distributed caching / rate limiting -->
     <PackageVersion Include="StackExchange.Redis" Version="2.13.10" />
@@ -77,6 +88,14 @@
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.6.0" />
+
+    <!-- Integration test stack (Testcontainers) -->
+    <PackageVersion Include="Testcontainers" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.MsSql" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.MySql" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.CosmosDb" Version="4.6.0" />
+    <PackageVersion Include="Testcontainers.MongoDb" Version="4.6.0" />
   </ItemGroup>
 
 </Project>

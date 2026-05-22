@@ -83,7 +83,7 @@ All assemblies use the `EncryptedTouhid.<ProjectName>.*` namespace convention. T
 | **Workflow** | `ResearchAndSummariseWorkflow` (multi-agent pipeline) |
 | **Streaming** | `IAsyncEnumerable<string>` runner + SSE HTTP endpoint |
 | **Structured output** | Sentiment classifier endpoint returning typed JSON |
-| **Conversation memory** | `IConversationStore` with `InMemory` and `Sqlite` (EF Core) implementations, TTL + message cap |
+| **Conversation memory** | `IConversationStore` with eight backings: `InMemory`, `Sqlite`, `SqlServer`, `AzureSql`, `Postgres`, `MySql`, `Cosmos`, `Mongo`. TTL + message cap honoured per provider, matching `IAuditLog` impl ships per backend |
 | **RAG** | `IDocumentRetriever` with `InMemory` cosine-similarity + Qdrant gRPC implementations |
 | **Versioned prompts** | `src/<Name>.Host/Prompts/v1/{system,guardrails,examples}.md` — bump to `v2/` for a roll |
 
@@ -156,7 +156,7 @@ Every knob lives in `appsettings.json` (or env vars prefixed `COMPLETEAGENT_`, o
 | `Resilience` | Retry attempts, backoff seconds |
 | `Telemetry` | Service name, OTLP endpoint, console exporter toggle |
 | `Conversation` | TTL minutes, max messages per conversation |
-| `Persistence` | `InMemory` or `Sqlite`, connection string |
+| `Persistence` | `InMemory` · `Sqlite` · `SqlServer` · `AzureSql` · `Postgres` · `MySql` · `Cosmos` · `Mongo`. Same connection string for relational + Mongo; nested `Cosmos.*` / `Mongo.*` blocks for document stores |
 | `Retrieval` | Embedding model, vector store (`InMemory` or `Qdrant`), Qdrant host/port |
 | `Moderation` | `None` or `AzureContentSafety`, endpoint, max severity threshold |
 

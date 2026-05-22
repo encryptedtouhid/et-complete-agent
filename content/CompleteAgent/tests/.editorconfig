@@ -12,3 +12,18 @@ dotnet_diagnostic.CA1305.severity = none
 
 # xUnit Assert.* overloads without StringComparison are the canonical form in tests.
 dotnet_diagnostic.CA1307.severity = none
+
+# Test classes manage disposables via IAsyncLifetime — don't require IDisposable too.
+dotnet_diagnostic.CA1001.severity = none
+
+# Test helpers create disposables scoped to the test lifetime; xUnit drives teardown.
+dotnet_diagnostic.CA2000.severity = none
+
+# xUnit IClassFixture / [Fact] requires public test + fixture classes.
+dotnet_diagnostic.CA1515.severity = none
+
+# Tests prefer interface types for clarity; perf delta is irrelevant in tests.
+dotnet_diagnostic.CA1859.severity = none
+
+# Cosmos emulator and other dev-only containers use self-signed certs.
+dotnet_diagnostic.SCS0004.severity = none

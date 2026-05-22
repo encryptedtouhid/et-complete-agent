@@ -51,7 +51,9 @@ dotnet new et-complete-agent -n SmokeTest -o "$SMOKE_DIR" --no-restore >/dev/nul
 (
     cd "$SMOKE_DIR"
     dotnet build -c Release --nologo -v quiet >/dev/null
-    dotnet test --no-build -c Release --nologo -v quiet >/dev/null
+    # Integration tests need Docker (Testcontainers). CI runs them in a separate
+    # step; the pre-commit hook stays Docker-free and skips Category=Integration.
+    dotnet test --no-build -c Release --nologo -v quiet --filter "Category!=Integration" >/dev/null
 )
 
 echo "✓ format + pack + smoke (build + test) all clean"

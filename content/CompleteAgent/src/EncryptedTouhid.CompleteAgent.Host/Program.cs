@@ -46,10 +46,24 @@ if (rateLimitOpts?.Store == EncryptedTouhid.CompleteAgent.Host.RateLimiting.Rate
 
 var persistenceOpts = builder.Configuration.GetSection(EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.PersistenceOptions.SectionName)
     .Get<EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.PersistenceOptions>();
-if (persistenceOpts?.ConversationStore == EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Sqlite)
+switch (persistenceOpts?.ConversationStore)
 {
-    builder.Services.AddSingleton<SqliteHealthCheck>();
-    healthChecks.AddCheck<SqliteHealthCheck>("sqlite", tags: ["ready"]);
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Sqlite:
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.SqlServer:
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.AzureSql:
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Postgres:
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.MySql:
+        builder.Services.AddSingleton<RelationalDbHealthCheck>();
+        healthChecks.AddCheck<RelationalDbHealthCheck>("relational-db", tags: ["ready"]);
+        break;
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Cosmos:
+        builder.Services.AddSingleton<CosmosHealthCheck>();
+        healthChecks.AddCheck<CosmosHealthCheck>("cosmos", tags: ["ready"]);
+        break;
+    case EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Mongo:
+        builder.Services.AddSingleton<MongoHealthCheck>();
+        healthChecks.AddCheck<MongoHealthCheck>("mongo", tags: ["ready"]);
+        break;
 }
 
 var retrievalOpts = builder.Configuration.GetSection(EncryptedTouhid.CompleteAgent.Infrastructure.Configuration.RetrievalOptions.SectionName)
