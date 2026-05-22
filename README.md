@@ -18,20 +18,20 @@ Generates a Clean-Architecture solution with everything a real deployment needs:
 dotnet new install ET.AgentFramework.Templates
 
 # 2. Generate a new solution
-dotnet new et-complete-agent -n MyAgent
-cd MyAgent
+dotnet new et-complete-agent -n CompleteAgent
+cd CompleteAgent
 
 # 3. Set a provider + API key (Azure OpenAI shown below)
 dotnet user-secrets set "Agent:AzureOpenAI:Endpoint" "https://<resource>.openai.azure.com" \
-    --project src/ET.MyAgent.Host
+    --project src/ET.CompleteAgent.Host
 az login   # DefaultAzureCredential picks this up
 
 # 4. Set an API key for your agent endpoint
 dotnet user-secrets set "Authentication:ApiKey" "$(openssl rand -hex 16)" \
-    --project src/ET.MyAgent.Host
+    --project src/ET.CompleteAgent.Host
 
 # 5. Run
-dotnet run --project src/ET.MyAgent.Host
+dotnet run --project src/ET.CompleteAgent.Host
 ```
 
 ```bash
@@ -47,18 +47,18 @@ curl -X POST http://localhost:5000/agent/run \
 ## What you get
 
 ```
-MyAgent/
-├── MyAgent.sln
+CompleteAgent/
+├── CompleteAgent.sln
 ├── Dockerfile                                Multi-stage, distroless, non-root
 ├── docker-compose.yml                        Agent + Redis + Qdrant for local dev
 ├── deploy/k8s/                               Namespace, Deployment, HPA, NetworkPolicy, ...
 ├── src/
-│   ├── ET.MyAgent.Domain/                    Contracts, value records (zero deps)
-│   ├── ET.MyAgent.Application/               Runner, tools, workflows, sanitiser, retry
-│   ├── ET.MyAgent.Infrastructure/            LLM client, EF Core, Qdrant, moderation
-│   └── ET.MyAgent.Host/                      Program.cs, endpoints, auth, telemetry
+│   ├── ET.CompleteAgent.Domain/                    Contracts, value records (zero deps)
+│   ├── ET.CompleteAgent.Application/               Runner, tools, workflows, sanitiser, retry
+│   ├── ET.CompleteAgent.Infrastructure/            LLM client, EF Core, Qdrant, moderation
+│   └── ET.CompleteAgent.Host/                      Program.cs, endpoints, auth, telemetry
 └── tests/
-    └── ET.MyAgent.Application.Tests/         xUnit + NSubstitute + FakeTimeProvider
+    └── ET.CompleteAgent.Application.Tests/         xUnit + NSubstitute + FakeTimeProvider
 ```
 
 All assemblies use the `ET.<ProjectName>.*` namespace convention. The `ET.` prefix is the org marker and stays fixed; the middle segment is whatever you pass to `dotnet new -n`.
