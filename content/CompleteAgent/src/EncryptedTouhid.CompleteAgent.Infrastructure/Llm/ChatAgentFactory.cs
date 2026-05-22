@@ -1,3 +1,4 @@
+using Azure;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using EncryptedTouhid.CompleteAgent.Application.Agents;
@@ -41,7 +42,9 @@ public sealed class ChatAgentFactory : IChatAgentFactory
         var endpoint = options.AzureOpenAI.Endpoint
             ?? throw new InvalidOperationException("AzureOpenAI:Endpoint must be set.");
 
-        var azureClient = new AzureOpenAIClient(new Uri(endpoint), new DefaultAzureCredential());
+        var azureClient = string.IsNullOrWhiteSpace(options.AzureOpenAI.ApiKey)
+            ? new AzureOpenAIClient(new Uri(endpoint), new DefaultAzureCredential())
+            : new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(options.AzureOpenAI.ApiKey));
         return azureClient.GetChatClient(options.Model);
     }
 

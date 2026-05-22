@@ -6,6 +6,21 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.4.1] — 2026-05-23
+
+### Added
+- Azure OpenAI now accepts an API key via `Agent:AzureOpenAI:ApiKey` (uses
+  `AzureKeyCredential`). When unset, the provider keeps using
+  `DefaultAzureCredential` exactly as before — no behaviour change for
+  existing managed-identity / `az login` flows.
+
+### Fixed
+- Host crashed at startup with the default config (`Jwt.Enabled = false`)
+  because `app.UseAuthentication()` ran unconditionally while
+  `AddAuthentication()` is only registered when JWT is enabled.
+  `UseAuthentication()` is now gated on `Jwt.Enabled`; the API-key
+  middleware is unaffected.
+
 ## [0.4.0] — 2026-05-23
 
 ### Added

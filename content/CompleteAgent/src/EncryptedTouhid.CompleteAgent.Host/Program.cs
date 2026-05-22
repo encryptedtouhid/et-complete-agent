@@ -89,7 +89,11 @@ app.UseExceptionHandler();
 app.UseAgentSecurity();
 app.UseCors(CorsOptions.PolicyName);
 app.UseApiKeyAuthentication();
-app.UseAuthentication();
+var jwtEnabled = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()?.Enabled == true;
+if (jwtEnabled)
+{
+    app.UseAuthentication();
+}
 app.UseAuthorization();
 app.UseAgentRateLimiting(builder.Configuration);
 app.UseCostBudgeting();

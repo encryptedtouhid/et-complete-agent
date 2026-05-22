@@ -56,6 +56,8 @@ public enum AgentProvider
 public sealed class AzureOpenAISettings
 {
     public string? Endpoint { get; init; }
+
+    public string? ApiKey { get; init; }
 }
 
 public sealed class OpenAISettings
