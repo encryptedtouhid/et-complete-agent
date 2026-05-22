@@ -6,6 +6,8 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-05-23
+
 ### Added
 
 #### Conversation memory — pluggable backends
@@ -161,6 +163,7 @@ All notable changes to this template are documented here. The format follows
   (read-only FS, dropped caps, three probes), Service, HPA, NetworkPolicy,
   optional Aspire Dashboard, Kustomization.
 
-[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.3.0
 [0.1.0]: https://github.com/EncryptedTouhid/et-complete-agent/releases/tag/v0.1.0

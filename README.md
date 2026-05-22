@@ -162,6 +162,33 @@ Every knob lives in `appsettings.json` (or env vars prefixed `COMPLETEAGENT_`, o
 
 ---
 
+## Conversation memory backends
+
+`IConversationStore` ships with **8 backings**, selected via `Persistence:ConversationStore`. Every backend honours `Conversation:TtlMinutes` and `Conversation:MaxMessagesPerConversation`, has a matching `IAuditLog` implementation, exposes a provider-aware `/readyz` health check, and idempotently creates its schema / containers / indexes on startup.
+
+| Backend | `ConversationStore` value | Required config | Best for |
+| --- | --- | --- | --- |
+| In-memory | `InMemory` *(default)* | none | Dev, single-instance, no durability |
+| SQLite | `Sqlite` | `Persistence:ConnectionString="Data Source=completeagent.db"` | Single-node prod, embedded, zero ops |
+| SQL Server | `SqlServer` | `Persistence:ConnectionString="Server=...;Database=...;..."` | Existing MSSQL fleet, on-prem or VM |
+| Azure SQL | `AzureSql` | `Persistence:ConnectionString="Server=tcp:<x>.database.windows.net,1433;Database=...;..."` | Azure-managed SQL with retry-on-failure baked in |
+| PostgreSQL | `Postgres` | `Persistence:ConnectionString="Host=...;Username=...;Password=...;Database=..."` | Open-source RDBMS, Aurora / RDS / Supabase / Neon |
+| MySQL | `MySql` | `Persistence:ConnectionString="Server=...;Database=...;Uid=...;Pwd=..."` | Existing MySQL / MariaDB fleet, Aurora MySQL |
+| Cosmos DB | `Cosmos` | `Persistence:Cosmos:ConnectionString` *or* `Persistence:Cosmos:AccountEndpoint` + `Persistence:Cosmos:AccountKey` (+ `Database`, `ConversationsContainer`, `AuditContainer`) | Global distribution, autoscale, per-doc TTL |
+| MongoDB | `Mongo` | `Persistence:ConnectionString="mongodb://..."` (+ `Persistence:Mongo:Database`, `ConversationsCollection`, `AuditCollection`) | Document-oriented, replica sets, Atlas |
+
+Implementation details:
+
+- **Relational** (`Sqlite` · `SqlServer` · `AzureSql` · `Postgres` · `MySql`) share `EfCoreConversationStore` + `EfCoreAuditLog`. `RelationalSchemaBootstrapper` calls `EnsureCreatedAsync` on startup. SQL Server, Azure SQL, PostgreSQL, and MySQL use their native `datetimeoffset` types; SQLite uses a value converter to ticks so range queries translate.
+- **Cosmos DB** uses the native `Microsoft.Azure.Cosmos` SDK. Container is partitioned by `/conversationId`. `CosmosSchemaBootstrapper` creates database + containers (TTL set to `Conversation:TtlMinutes × 60`s).
+- **MongoDB** uses the native `MongoDB.Driver`. `MongoSchemaBootstrapper` ensures a compound `(conversationId, createdAt)` index for fast load plus a TTL index on `createdAt` for auto-expiry.
+
+Health checks are auto-registered per selected backend (`RelationalDbHealthCheck` / `CosmosHealthCheck` / `MongoHealthCheck`) and tagged `ready`, so `/readyz` fails fast when the configured store is unreachable.
+
+To plug a custom backing (DynamoDB, Cassandra, FoundationDB, …) implement `IConversationStore` and register it instead of calling `AddInfrastructure`'s default. The contract is three methods: `LoadAsync`, `AppendAsync`, `ClearAsync`.
+
+---
+
 ## Deploy
 
 ### Local — docker-compose
