@@ -1,4 +1,5 @@
 using ET.CompleteAgent.Application.Agents;
+using ET.CompleteAgent.Application.Audit;
 using ET.CompleteAgent.Application.Budgeting;
 using ET.CompleteAgent.Application.Conversations;
 using ET.CompleteAgent.Application.Moderation;
@@ -50,6 +51,7 @@ public static class ApplicationServiceCollectionExtensions
 
         services.TryAddContentModerator();
         services.TryAddTokenUsageTracker();
+        services.TryAddAuditLog();
         services.AddSingleton<IAgentRunner, AgentRunner>();
         services.AddSingleton<ResearchAndSummariseWorkflow>();
         return services;
@@ -70,6 +72,15 @@ public static class ApplicationServiceCollectionExtensions
         if (!hasTracker)
         {
             services.AddSingleton<ITokenUsageTracker, InMemoryTokenUsageTracker>();
+        }
+    }
+
+    private static void TryAddAuditLog(this IServiceCollection services)
+    {
+        var hasAudit = services.Any(d => d.ServiceType == typeof(IAuditLog));
+        if (!hasAudit)
+        {
+            services.AddSingleton<IAuditLog, NoOpAuditLog>();
         }
     }
 }

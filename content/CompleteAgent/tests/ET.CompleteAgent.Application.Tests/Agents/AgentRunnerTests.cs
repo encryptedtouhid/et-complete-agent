@@ -1,4 +1,5 @@
 using ET.CompleteAgent.Application.Agents;
+using ET.CompleteAgent.Application.Audit;
 using ET.CompleteAgent.Application.Budgeting;
 using ET.CompleteAgent.Application.Conversations;
 using ET.CompleteAgent.Application.Moderation;
@@ -22,6 +23,7 @@ public sealed class AgentRunnerTests
         var conversationStore = Substitute.For<IConversationStore>();
         var moderator = new NoOpContentModerator();
         var tracker = new InMemoryTokenUsageTracker();
+        var audit = new NoOpAuditLog();
         var timeProvider = new FakeTimeProvider(DateTimeOffset.UnixEpoch);
         var timeTool = new GetCurrentTimeTool(timeProvider);
         var searchTool = new SearchKnowledgeBaseTool(NullLogger<SearchKnowledgeBaseTool>.Instance);
@@ -29,24 +31,26 @@ public sealed class AgentRunnerTests
         var logger = NullLogger<AgentRunner>.Instance;
 
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(null!, promptLoader, conversationStore, moderator, tracker, timeProvider, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(null!, promptLoader, conversationStore, moderator, tracker, audit, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, null!, conversationStore, moderator, tracker, timeProvider, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, null!, conversationStore, moderator, tracker, audit, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, null!, moderator, tracker, timeProvider, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, null!, moderator, tracker, audit, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, null!, tracker, timeProvider, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, null!, tracker, audit, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, null!, timeProvider, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, null!, audit, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, null!, timeTool, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, null!, timeProvider, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, timeProvider, null!, searchTool, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, audit, null!, timeTool, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, timeProvider, timeTool, null!, retryPolicy, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, audit, timeProvider, null!, searchTool, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, timeProvider, timeTool, searchTool, null!, logger));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, audit, timeProvider, timeTool, null!, retryPolicy, logger));
         Assert.Throws<ArgumentNullException>(() =>
-            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, timeProvider, timeTool, searchTool, retryPolicy, null!));
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, audit, timeProvider, timeTool, searchTool, null!, logger));
+        Assert.Throws<ArgumentNullException>(() =>
+            new AgentRunner(agentFactory, promptLoader, conversationStore, moderator, tracker, audit, timeProvider, timeTool, searchTool, retryPolicy, null!));
     }
 }

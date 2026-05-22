@@ -1,4 +1,5 @@
 using ET.CompleteAgent.Application.Agents;
+using ET.CompleteAgent.Application.Audit;
 using ET.CompleteAgent.Application.Conversations;
 using ET.CompleteAgent.Application.Moderation;
 using ET.CompleteAgent.Application.Retrieval;
@@ -7,6 +8,7 @@ using ET.CompleteAgent.Infrastructure.Conversations;
 using ET.CompleteAgent.Infrastructure.Llm;
 using ET.CompleteAgent.Infrastructure.Moderation;
 using ET.CompleteAgent.Infrastructure.Persistence;
+using ET.CompleteAgent.Infrastructure.Persistence.Audit;
 using ET.CompleteAgent.Infrastructure.Persistence.Conversations;
 using ET.CompleteAgent.Infrastructure.Retrieval;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +64,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddMemoryCache();
 
         var persistence = configuration.GetSection(PersistenceOptions.SectionName).Get<PersistenceOptions>() ?? new();
-        AddConversationStore(services, persistence);
+        AddPersistence(services, persistence);
 
         services.AddSingleton(sp =>
             EmbeddingGeneratorFactory.Create(
@@ -87,16 +89,18 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddSingleton<IDocumentRetriever, InMemoryDocumentRetriever>();
     }
 
-    private static void AddConversationStore(IServiceCollection services, PersistenceOptions persistence)
+    private static void AddPersistence(IServiceCollection services, PersistenceOptions persistence)
     {
         if (persistence.ConversationStore == ConversationStoreKind.Sqlite)
         {
             services.AddDbContextFactory<AgentDbContext>(opts =>
                 opts.UseSqlite(persistence.ConnectionString));
             services.AddSingleton<IConversationStore, EfCoreConversationStore>();
+            services.AddSingleton<IAuditLog, EfCoreAuditLog>();
             return;
         }
 
         services.AddSingleton<IConversationStore, InMemoryConversationStore>();
+        services.AddSingleton<IAuditLog, NoOpAuditLog>();
     }
 }

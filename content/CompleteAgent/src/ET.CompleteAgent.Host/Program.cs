@@ -2,10 +2,13 @@ using ET.CompleteAgent.Application;
 using ET.CompleteAgent.Host.Authentication;
 using ET.CompleteAgent.Host.Budgeting;
 using ET.CompleteAgent.Host.Endpoints;
+using ET.CompleteAgent.Host.Exceptions;
 using ET.CompleteAgent.Host.HealthChecks;
+using ET.CompleteAgent.Host.Idempotency;
 using ET.CompleteAgent.Host.Models;
 using ET.CompleteAgent.Host.OpenApi;
 using ET.CompleteAgent.Host.RateLimiting;
+using ET.CompleteAgent.Host.Security;
 using ET.CompleteAgent.Host.Telemetry;
 using ET.CompleteAgent.Infrastructure;
 using Scalar.AspNetCore;
@@ -24,7 +27,9 @@ builder.Services
     .AddAgentAuthentication(builder.Configuration)
     .AddAgentTelemetry(builder.Configuration)
     .AddAgentRateLimiting(builder.Configuration)
-    .AddCostBudgeting(builder.Configuration);
+    .AddCostBudgeting(builder.Configuration)
+    .AddAgentSecurity(builder.Configuration)
+    .AddIdempotency(builder.Configuration);
 
 builder.Services.AddSingleton<AgentOptionsHealthCheck>();
 var healthChecks = builder.Services
@@ -61,14 +66,20 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.Services.AddOpenApi();
+builder.Services.AddExceptionHandler<AgentExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+app.UseAgentSecurity();
+app.UseCors(CorsOptions.PolicyName);
 app.UseApiKeyAuthentication();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAgentRateLimiting(builder.Configuration);
 app.UseCostBudgeting();
+app.UseIdempotency();
 
 app.MapOpenApi();
 app.MapScalarApiReference("/scalar", options =>
