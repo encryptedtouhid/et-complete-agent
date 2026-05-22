@@ -8,64 +8,19 @@ All notable changes to this template are documented here. The format follows
 
 ## [0.3.0] — 2026-05-23
 
-### Changed
-- **Generated project namespaces and folders renamed** from `ET.<Name>.*`
-  to `EncryptedTouhid.<Name>.*` to match the NuGet package id introduced in
-  0.2.0. A `dotnet new et-complete-agent -n MyAgent` now produces
-  `src/EncryptedTouhid.MyAgent.Domain`, `EncryptedTouhid.MyAgent.Application`,
-  and so on. The short name (`et-complete-agent`), VS title, sourceName
-  template token (`CompleteAgent`), and the actual code structure are
-  otherwise identical to 0.2.0.
-- OpenTelemetry `ActivitySource` and `Meter` names changed from
-  `ET.CompleteAgent` to `EncryptedTouhid.CompleteAgent`. Existing dashboards
-  filtering on the old name need updating.
-
 ### Added
-- **Tracked git hooks under `.githooks/`** with `scripts/install-hooks.sh`
-  to activate them. `pre-commit` runs three gates in fail-fast order:
-  `dotnet format --verify-no-changes` against the template source, then
-  `dotnet pack` of the template package, then install + `dotnet new` +
-  build + test on a generated sample. Bypass with `git commit --no-verify`
-  when you really must.
-- Auto-applied `dotnet format` pass across the entire template source —
-  95 files now conform to canonical .NET style (no manual alignment
-  spaces, consistent indentation, final newlines).
 
-## [0.2.0] — 2026-05-23
-
-### Changed
-- **NuGet package id renamed** from `ET.AgentFramework.Templates` to
-  `EncryptedTouhid.AgentFramework.Templates`. The old id is reserved by another
-  account on nuget.org and could not be published. Install command, badges,
-  CI workflow, and template identity GUID all updated to match. The generated
-  project's namespaces (`ET.<Name>.*`), the `dotnet new` short name
-  (`et-complete-agent`), and the Visual Studio template title are unchanged —
-  this only affects how the template is published and installed.
-
-## [0.1.1] — 2026-05-23
-
-### Fixed
-- Repo metadata used an incorrect contact email for security and conduct
-  reports. SECURITY.md and CODE_OF_CONDUCT.md now both reference the project
-  owner's GitHub primary email. Earlier git history has been rewritten to
-  remove the old address from blob storage.
-
-### Added
+#### Versioning + Source Link
 - **Automatic SemVer from git tags** via MinVer in both the template package
   and every project in the generated solution. Tag `v1.2.3` produces a
   `1.2.3` build; pre-tag builds emit `0.0.0-alpha.0`. `MinVerAutoIncrement`
   is `minor` by default, `MinVerTagPrefix` is `v`.
 - **Source Link** with embedded sources and symbols on the template package
-  itself so consumers can step into the template's own code in their debugger.
+  so consumers can step into the template's own code in their debugger.
 - **`/version` endpoint** exposing AssemblyInformationalVersion, parsed commit
   SHA, dirty-flag, and environment. Auth-bypassed alongside `/healthz`.
-- VersionInfo DTO registered in the JSON source-gen context.
 
-### Changed
-- `<Version>` removed from `EncryptedTouhid.AgentFramework.Templates.csproj` — version now
-  flows entirely from git tags.
-
-### Added
+#### Security & resilience
 - Security headers middleware (HSTS, X-Content-Type-Options, X-Frame-Options,
   Referrer-Policy, Permissions-Policy, Content-Security-Policy). HSTS only
   emits over HTTPS; all settings tunable via `SecurityHeaders` config.
@@ -77,10 +32,27 @@ All notable changes to this template are documented here. The format follows
   an `Idempotency-Replay: true` header.
 - Append-only audit log via `IAuditLog` — `NoOpAuditLog` default; EF Core
   implementation auto-enabled when `Persistence:ConversationStore=Sqlite`.
-- Repo-health files: CHANGELOG, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT,
-  GitHub issue / PR templates, README badges.
+
+#### Developer workflow
+- **Tracked git hooks under `.githooks/`** with `scripts/install-hooks.sh`
+  to activate them. `pre-commit` runs three gates in fail-fast order:
+  `dotnet format --verify-no-changes` against the template source, then
+  `dotnet pack` of the template package, then install + `dotnet new` +
+  build + test on a generated sample. Bypass with `git commit --no-verify`
+  when you really must.
+- Canonical formatting applied across the entire template source via
+  `dotnet format` (no manual alignment spaces, consistent indentation,
+  final newlines).
+- Tag-triggered NuGet publish job in CI. Push a `v*` tag, CI packs and
+  pushes the matching version. Requires `NUGET_API_KEY` repository secret
+  scoped to the `nuget` environment.
+
+#### Docs
+- Repo-health files: SECURITY, CONTRIBUTING, CODE_OF_CONDUCT, GitHub issue /
+  PR templates.
 - Architecture decision records (`docs/adr/0001..0003`).
 - Operational runbook (`docs/runbook.md`).
+- README badges for CI status, NuGet version, downloads, license, .NET version.
 
 ## [0.1.0] — 2026-05-23
 
@@ -153,7 +125,5 @@ All notable changes to this template are documented here. The format follows
   optional Aspire Dashboard, Kustomization.
 
 [Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.1...v0.2.0
-[0.1.1]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.1.1
+[0.3.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.3.0
 [0.1.0]: https://github.com/EncryptedTouhid/et-complete-agent/releases/tag/v0.1.0
