@@ -6,6 +6,14 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-05-23
+
+### Fixed
+- Repo metadata used an incorrect contact email for security and conduct
+  reports. SECURITY.md and CODE_OF_CONDUCT.md now both reference the project
+  owner's GitHub primary email. Earlier git history has been rewritten to
+  remove the old address from blob storage.
+
 ### Added
 - **Automatic SemVer from git tags** via MinVer in both the template package
   and every project in the generated solution. Tag `v1.2.3` produces a
@@ -108,5 +116,6 @@ All notable changes to this template are documented here. The format follows
   (read-only FS, dropped caps, three probes), Service, HPA, NetworkPolicy,
   optional Aspire Dashboard, Kustomization.
 
-[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/EncryptedTouhid/et-complete-agent/releases/tag/v0.1.0
