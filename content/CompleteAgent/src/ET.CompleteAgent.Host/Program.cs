@@ -4,9 +4,11 @@ using ET.CompleteAgent.Host.Budgeting;
 using ET.CompleteAgent.Host.Endpoints;
 using ET.CompleteAgent.Host.HealthChecks;
 using ET.CompleteAgent.Host.Models;
+using ET.CompleteAgent.Host.OpenApi;
 using ET.CompleteAgent.Host.RateLimiting;
 using ET.CompleteAgent.Host.Telemetry;
 using ET.CompleteAgent.Infrastructure;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,15 @@ app.UseAgentRateLimiting(builder.Configuration);
 app.UseCostBudgeting();
 
 app.MapOpenApi();
+app.MapScalarApiReference("/scalar", options =>
+{
+    options.Title = "Complete Agent — API Reference";
+    options.Theme = ScalarTheme.None;
+    options.DarkMode = true;
+    options.CustomCss = GitHubScalarTheme.Css;
+    options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+});
+
 app.MapHealthChecks("/healthz");
 app.MapHealthChecks("/readyz", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
 {

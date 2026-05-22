@@ -123,7 +123,8 @@ All assemblies use the `ET.<ProjectName>.*` namespace convention. The `ET.` pref
 | `DELETE` | `/agent/conversations/{conversationId}` | Wipes a stored conversation. |
 | `GET` | `/healthz` | Liveness — bypasses auth and rate limiting. |
 | `GET` | `/readyz` | Readiness — validates LLM provider configuration. |
-| `GET` | `/openapi/v1.json` | OpenAPI schema. |
+| `GET` | `/openapi/v1.json` | OpenAPI schema (raw JSON). |
+| `GET` | `/scalar` | Interactive API explorer (Scalar UI, GitHub-themed, dark/light auto). |
 
 Request body for `/agent/run` and `/agent/stream`:
 
@@ -168,6 +169,7 @@ Wires `agent → redis → qdrant → aspire-dashboard` with persistent volumes 
 | Service | URL |
 | --- | --- |
 | Agent API | http://localhost:8080 |
+| **Scalar API Explorer** (GitHub-themed, dark/light auto) | **http://localhost:8080/scalar** |
 | **Aspire Dashboard** (traces, metrics, logs) | **http://localhost:18888** |
 | Qdrant UI | http://localhost:6333/dashboard |
 

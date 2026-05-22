@@ -60,7 +60,8 @@ curl -X POST http://localhost:5000/agent/run \
 | `DELETE` | `/agent/conversations/{id}` | Clears a stored conversation. |
 | `GET` | `/healthz` | Liveness — auth-bypassed. |
 | `GET` | `/readyz` | Readiness — validates LLM config. |
-| `GET` | `/openapi/v1.json` | OpenAPI schema. |
+| `GET` | `/openapi/v1.json` | OpenAPI schema (raw JSON). |
+| `GET` | `/scalar` | Interactive API explorer — Scalar UI with GitHub Primer theme, follows OS dark/light. |
 
 ---
 
@@ -127,6 +128,7 @@ The compose stack wires `agent → redis → qdrant → aspire-dashboard` with p
 | Service | URL |
 | --- | --- |
 | Agent API | http://localhost:8080 |
+| **Scalar API Explorer** | **http://localhost:8080/scalar** — GitHub-themed, dark/light auto |
 | **Aspire Dashboard** | **http://localhost:18888** — traces, metrics, structured logs |
 | Qdrant UI | http://localhost:6333/dashboard |
 
