@@ -30,4 +30,11 @@
     <ProjectReference Include="..\..\src\ET.CompleteAgent.Infrastructure\ET.CompleteAgent.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\src\ET.CompleteAgent.Host\Prompts\**\*.md">
+      <Link>Prompts\%(RecursiveDir)%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

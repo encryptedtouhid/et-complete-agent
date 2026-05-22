@@ -1,6 +1,6 @@
-namespace ET.CompleteAgent.Host.Budgeting;
+namespace ET.CompleteAgent.Application.Budgeting;
 
-internal interface ITokenUsageTracker
+public interface ITokenUsageTracker
 {
     long GetUsage(string subjectKey, DateOnly day);
 

@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 
-namespace ET.CompleteAgent.Host.Budgeting;
+namespace ET.CompleteAgent.Application.Budgeting;
 
-internal sealed class InMemoryTokenUsageTracker : ITokenUsageTracker
+public sealed class InMemoryTokenUsageTracker : ITokenUsageTracker
 {
     private readonly ConcurrentDictionary<string, long> _usage = new(StringComparer.Ordinal);
 

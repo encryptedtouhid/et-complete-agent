@@ -6,14 +6,14 @@ namespace ET.CompleteAgent.Host.Authentication;
 
 internal sealed class ApiKeyAuthenticationMiddleware : IMiddleware
 {
-    private static readonly string[] BypassPaths = ["/healthz", "/readyz", "/openapi"];
+    private static readonly string[] BypassPaths = ["/healthz", "/readyz", "/openapi", "/scalar"];
 
-    private readonly byte[] _expectedKeyBytes;
+    private readonly byte[][] _expectedKeys;
 
     public ApiKeyAuthenticationMiddleware(IOptions<ApiKeyOptions> options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        _expectedKeyBytes = Encoding.UTF8.GetBytes(options.Value.ApiKey);
+        _expectedKeys = [.. options.Value.ApiKeys.Select(k => Encoding.UTF8.GetBytes(k))];
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -34,12 +34,12 @@ internal sealed class ApiKeyAuthenticationMiddleware : IMiddleware
         }
 
         var providedBytes = Encoding.UTF8.GetBytes(providedKey);
-        if (!CryptographicOperations.FixedTimeEquals(providedBytes, _expectedKeyBytes))
-        {
-            return Unauthorized(context, "API key invalid");
-        }
+        var matched = _expectedKeys.Any(expected =>
+            CryptographicOperations.FixedTimeEquals(providedBytes, expected));
 
-        return next(context);
+        return matched
+            ? next(context)
+            : Unauthorized(context, "API key invalid");
     }
 
     private static Task Unauthorized(HttpContext context, string reason)

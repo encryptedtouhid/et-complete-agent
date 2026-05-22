@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using ET.CompleteAgent.Application.Budgeting;
 using ET.CompleteAgent.Application.Conversations;
 using ET.CompleteAgent.Application.Guardrails;
 using ET.CompleteAgent.Application.Moderation;
@@ -21,6 +22,8 @@ public sealed partial class AgentRunner : IAgentRunner
     private readonly IPromptLoader _promptLoader;
     private readonly IConversationStore _conversationStore;
     private readonly IContentModerator _moderator;
+    private readonly ITokenUsageTracker _usageTracker;
+    private readonly TimeProvider _timeProvider;
     private readonly GetCurrentTimeTool _timeTool;
     private readonly SearchKnowledgeBaseTool _searchTool;
     private readonly RetryPolicy _retryPolicy;
@@ -32,6 +35,8 @@ public sealed partial class AgentRunner : IAgentRunner
         IPromptLoader promptLoader,
         IConversationStore conversationStore,
         IContentModerator moderator,
+        ITokenUsageTracker usageTracker,
+        TimeProvider timeProvider,
         GetCurrentTimeTool timeTool,
         SearchKnowledgeBaseTool searchTool,
         RetryPolicy retryPolicy,
@@ -41,6 +46,8 @@ public sealed partial class AgentRunner : IAgentRunner
         _promptLoader = promptLoader ?? throw new ArgumentNullException(nameof(promptLoader));
         _conversationStore = conversationStore ?? throw new ArgumentNullException(nameof(conversationStore));
         _moderator = moderator ?? throw new ArgumentNullException(nameof(moderator));
+        _usageTracker = usageTracker ?? throw new ArgumentNullException(nameof(usageTracker));
+        _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         _timeTool = timeTool ?? throw new ArgumentNullException(nameof(timeTool));
         _searchTool = searchTool ?? throw new ArgumentNullException(nameof(searchTool));
         _retryPolicy = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
@@ -52,6 +59,7 @@ public sealed partial class AgentRunner : IAgentRunner
         ArgumentNullException.ThrowIfNull(request);
 
         using var activity = AgentDiagnostics.ActivitySource.StartActivity("agent.run", ActivityKind.Internal);
+        activity?.SetTag("agent.subject_id", request.SubjectId);
         activity?.SetTag("agent.conversation_id", request.ConversationId);
 
         var inputModeration = await _moderator.ModerateAsync(request.UserInput, cancellationToken);
@@ -75,10 +83,19 @@ public sealed partial class AgentRunner : IAgentRunner
 
             if (response.Usage is { } usage)
             {
-                LogUsage(usage.InputTokenCount ?? 0, usage.OutputTokenCount ?? 0, usage.TotalTokenCount ?? 0);
+                var total = usage.TotalTokenCount ?? 0;
+                LogUsage(usage.InputTokenCount ?? 0, usage.OutputTokenCount ?? 0, total);
                 activity?.SetTag("ai.tokens.input", usage.InputTokenCount);
                 activity?.SetTag("ai.tokens.output", usage.OutputTokenCount);
                 activity?.SetTag("ai.tokens.total", usage.TotalTokenCount);
+
+                if (!string.IsNullOrWhiteSpace(request.SubjectId) && total > 0)
+                {
+                    _usageTracker.Increment(
+                        request.SubjectId,
+                        DateOnly.FromDateTime(_timeProvider.GetUtcNow().UtcDateTime),
+                        total);
+                }
             }
 
             var rawText = response.Text ?? string.Empty;
@@ -137,13 +154,25 @@ public sealed partial class AgentRunner : IAgentRunner
         var history = await LoadHistoryAsync(request.ConversationId, cancellationToken);
         var conversation = BuildMessages(history, input);
 
-        var stream = agent.RunStreamingAsync(conversation, cancellationToken: cancellationToken)
-            .Where(u => !string.IsNullOrEmpty(u.Text))
-            .Select(u => OutputGuardrail.Scrub(u.Text!));
-
-        await foreach (var text in stream.WithCancellation(cancellationToken))
+        long? totalTokens = null;
+        await foreach (var update in agent.RunStreamingAsync(conversation, cancellationToken: cancellationToken))
         {
-            yield return text;
+            if (update.Contents?.OfType<UsageContent>().FirstOrDefault() is { } usageContent)
+            {
+                totalTokens = (totalTokens ?? 0) + (usageContent.Details.TotalTokenCount ?? 0);
+            }
+            if (!string.IsNullOrEmpty(update.Text))
+            {
+                yield return OutputGuardrail.Scrub(update.Text);
+            }
+        }
+
+        if (totalTokens is { } captured && captured > 0 && !string.IsNullOrWhiteSpace(request.SubjectId))
+        {
+            _usageTracker.Increment(
+                request.SubjectId,
+                DateOnly.FromDateTime(_timeProvider.GetUtcNow().UtcDateTime),
+                captured);
         }
     }
 

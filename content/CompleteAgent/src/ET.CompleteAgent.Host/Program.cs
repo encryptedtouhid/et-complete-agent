@@ -27,9 +27,33 @@ builder.Services
     .AddCostBudgeting(builder.Configuration);
 
 builder.Services.AddSingleton<AgentOptionsHealthCheck>();
-builder.Services
+var healthChecks = builder.Services
     .AddHealthChecks()
     .AddCheck<AgentOptionsHealthCheck>("agent-options", tags: ["ready"]);
+
+var rateLimitOpts = builder.Configuration.GetSection(ET.CompleteAgent.Host.RateLimiting.RateLimitOptions.SectionName)
+    .Get<ET.CompleteAgent.Host.RateLimiting.RateLimitOptions>();
+if (rateLimitOpts?.Store == ET.CompleteAgent.Host.RateLimiting.RateLimitStoreKind.Redis)
+{
+    builder.Services.AddSingleton<RedisHealthCheck>();
+    healthChecks.AddCheck<RedisHealthCheck>("redis", tags: ["ready"]);
+}
+
+var persistenceOpts = builder.Configuration.GetSection(ET.CompleteAgent.Infrastructure.Configuration.PersistenceOptions.SectionName)
+    .Get<ET.CompleteAgent.Infrastructure.Configuration.PersistenceOptions>();
+if (persistenceOpts?.ConversationStore == ET.CompleteAgent.Infrastructure.Configuration.ConversationStoreKind.Sqlite)
+{
+    builder.Services.AddSingleton<SqliteHealthCheck>();
+    healthChecks.AddCheck<SqliteHealthCheck>("sqlite", tags: ["ready"]);
+}
+
+var retrievalOpts = builder.Configuration.GetSection(ET.CompleteAgent.Infrastructure.Configuration.RetrievalOptions.SectionName)
+    .Get<ET.CompleteAgent.Infrastructure.Configuration.RetrievalOptions>();
+if (retrievalOpts?.VectorStore == ET.CompleteAgent.Infrastructure.Configuration.VectorStoreKind.Qdrant)
+{
+    builder.Services.AddSingleton<QdrantHealthCheck>();
+    healthChecks.AddCheck<QdrantHealthCheck>("qdrant", tags: ["ready"]);
+}
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

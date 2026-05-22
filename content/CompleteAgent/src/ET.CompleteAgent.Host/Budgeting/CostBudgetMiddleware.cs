@@ -1,4 +1,5 @@
-using ET.CompleteAgent.Host.Authentication;
+using ET.CompleteAgent.Application.Budgeting;
+using ET.CompleteAgent.Host.Endpoints;
 using Microsoft.Extensions.Options;
 
 namespace ET.CompleteAgent.Host.Budgeting;
@@ -31,12 +32,7 @@ internal sealed class CostBudgetMiddleware : IMiddleware
             return;
         }
 
-        var subject = context.Request.Headers[ApiKeyOptions.HeaderName].ToString();
-        if (string.IsNullOrEmpty(subject))
-        {
-            subject = context.User.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-        }
-
+        var subject = SubjectScoping.ResolveSubject(context);
         var today = DateOnly.FromDateTime(_timeProvider.GetUtcNow().UtcDateTime);
         var used = _tracker.GetUsage(subject, today);
 
