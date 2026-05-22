@@ -163,7 +163,15 @@ export API_KEY=$(openssl rand -hex 16)
 docker compose up --build
 ```
 
-Wires `agent → redis → qdrant` with persistent volumes for SQLite and Qdrant.
+Wires `agent → redis → qdrant → aspire-dashboard` with persistent volumes for SQLite and Qdrant.
+
+| Service | URL |
+| --- | --- |
+| Agent API | http://localhost:8080 |
+| **Aspire Dashboard** (traces, metrics, logs) | **http://localhost:18888** |
+| Qdrant UI | http://localhost:6333/dashboard |
+
+The bundled [Aspire Dashboard](https://learn.microsoft.com/dotnet/aspire/fundamentals/dashboard) is OTLP-native and shows resources, console output, structured logs, distributed traces (`agent.run`, LLM calls, tool calls), and per-token metrics — zero config. Swap to Grafana / Application Insights / Honeycomb for production by pointing `COMPLETEAGENT_Telemetry__OtlpEndpoint` at their gateway.
 
 ### Kubernetes
 

@@ -1,0 +1,73 @@
+# OPTIONAL — Aspire Dashboard for in-cluster observability UI.
+# Apply with: kubectl apply -f deploy/k8s/aspire-dashboard.yaml
+#
+# For production, prefer a managed APM (Application Insights, Grafana Cloud,
+# Honeycomb, Datadog, ...) and point COMPLETEAGENT_Telemetry__OtlpEndpoint at it.
+#
+# Reach the UI via port-forward:
+#   kubectl -n completeagent port-forward svc/aspire-dashboard 18888:18888
+#   open http://localhost:18888
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspire-dashboard
+  namespace: completeagent
+  labels:
+    app: aspire-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aspire-dashboard
+  template:
+    metadata:
+      labels:
+        app: aspire-dashboard
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: dashboard
+          image: mcr.microsoft.com/dotnet/aspire-dashboard:9.4
+          ports:
+            - name: ui
+              containerPort: 18888
+            - name: otlp
+              containerPort: 18889
+          env:
+            - name: DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS
+              value: "true"
+            - name: DOTNET_DASHBOARD_OTLP_ENDPOINT_URL
+              value: "http://0.0.0.0:18889"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspire-dashboard
+  namespace: completeagent
+spec:
+  type: ClusterIP
+  ports:
+    - port: 18888
+      targetPort: ui
+      name: ui
+    - port: 18889
+      targetPort: otlp
+      name: otlp
+  selector:
+    app: aspire-dashboard

@@ -17,7 +17,8 @@ services:
       COMPLETEAGENT_Persistence__ConnectionString: "Data Source=/data/agent.db"
       COMPLETEAGENT_Retrieval__VectorStore: Qdrant
       COMPLETEAGENT_Retrieval__Qdrant__Host: qdrant
-      COMPLETEAGENT_Telemetry__OtlpEndpoint: http://otel:4317
+      COMPLETEAGENT_Telemetry__OtlpEndpoint: http://aspire-dashboard:18889
+      COMPLETEAGENT_Telemetry__EnableConsoleExporter: "false"
     volumes:
       - agent-data:/data
     depends_on:
@@ -25,6 +26,20 @@ services:
         condition: service_healthy
       qdrant:
         condition: service_started
+      aspire-dashboard:
+        condition: service_started
+
+  # Observability UI — traces, metrics, structured logs at http://localhost:18888
+  # First-party Microsoft Aspire Dashboard, OTLP-native, zero config.
+  # For production swap to Grafana + Tempo, Application Insights, Honeycomb, etc.
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.4
+    ports:
+      - "18888:18888"   # Web UI
+      - "18889:18889"   # OTLP gRPC receiver
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+      DOTNET_DASHBOARD_OTLP_ENDPOINT_URL: "http://0.0.0.0:18889"
 
   redis:
     image: redis:7-alpine

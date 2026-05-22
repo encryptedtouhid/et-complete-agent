@@ -122,7 +122,13 @@ export OPENAI_API_KEY=sk-...
 export API_KEY=$(openssl rand -hex 16)
 docker compose up --build
 ```
-The compose stack wires `agent → redis → qdrant` with persistent volumes.
+The compose stack wires `agent → redis → qdrant → aspire-dashboard` with persistent volumes.
+
+| Service | URL |
+| --- | --- |
+| Agent API | http://localhost:8080 |
+| **Aspire Dashboard** | **http://localhost:18888** — traces, metrics, structured logs |
+| Qdrant UI | http://localhost:6333/dashboard |
 
 ### Kubernetes
 ```bash
