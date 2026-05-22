@@ -6,6 +6,43 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+#### Conversation memory — pluggable backends
+- `IConversationStore` now ships with seven concrete backings, picked via
+  `Persistence:ConversationStore`:
+  - `InMemory` (default, `IMemoryCache` with sliding TTL)
+  - `Sqlite` (EF Core, file or `:memory:`)
+  - `SqlServer` (EF Core, retry-on-failure enabled)
+  - `AzureSql` (EF Core, same provider as SqlServer)
+  - `Postgres` (EF Core via Npgsql, retry-on-failure)
+  - `MySql` (EF Core via Pomelo; explicit `MySqlServerVersion` or auto-detect)
+  - `Cosmos` (native `Microsoft.Azure.Cosmos`, container partitioned by
+    `/conversationId`, container-level TTL)
+  - `Mongo` (native `MongoDB.Driver`, compound + TTL indexes)
+- `IAuditLog` now has matching EF Core, Cosmos, and Mongo implementations so
+  audit follows the conversation store automatically.
+- Schema bootstrap hosted services (`RelationalSchemaBootstrapper`,
+  `CosmosSchemaBootstrapper`, `MongoSchemaBootstrapper`) ensure the schema /
+  containers / indexes exist on startup — idempotent and safe to re-run.
+- `RelationalDbHealthCheck` replaces the SQLite-specific check; covers every
+  EF Core provider via `CanConnectAsync`. New `CosmosHealthCheck` and
+  `MongoHealthCheck` cover the document stores. All tagged `ready` so
+  `/readyz` fails fast when the configured store is unreachable.
+- `PersistenceOptions` is now `IValidatableObject` — provider-specific config
+  is checked at startup (`ValidateOnStart`) with clear error messages.
+
+#### Tests
+- New unit suites under `tests/EncryptedTouhid.CompleteAgent.Application.Tests`:
+  `PersistenceOptionsTests`, `InfrastructureDispatchTests`,
+  `InMemoryConversationStoreTests`, and SQLite-in-memory
+  `EfCoreConversationStoreTests` exercising the provider-agnostic EF path.
+- New `EncryptedTouhid.CompleteAgent.Infrastructure.IntegrationTests` project
+  with Testcontainers fixtures for MSSQL, Postgres, MySQL, Cosmos emulator,
+  and MongoDB. Tests carry `[Trait("Category", "Integration")]` so default
+  `dotnet test --filter "Category!=Integration"` skips them; CI runs both
+  unit and integration suites.
+
 ## [0.3.0] — 2026-05-23
 
 ### Added

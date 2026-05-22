@@ -79,7 +79,7 @@ All settings live in `appsettings.json`. Override via environment variables pref
 | `Resilience` | `MaxRetryAttempts`, `BackoffSeconds` |
 | `Telemetry` | `ServiceName`, `OtlpEndpoint`, `EnableConsoleExporter` |
 | `Conversation` | `TtlMinutes`, `MaxMessagesPerConversation` |
-| `Persistence` | `ConversationStore` (`InMemory` / `Sqlite`), `ConnectionString` |
+| `Persistence` | `ConversationStore` (`InMemory` / `Sqlite` / `SqlServer` / `AzureSql` / `Postgres` / `MySql` / `Cosmos` / `Mongo`), `ConnectionString`, `Cosmos.{ConnectionString,AccountEndpoint,AccountKey,Database,ConversationsContainer,AuditContainer,DatabaseThroughput}`, `Mongo.{Database,ConversationsCollection,AuditCollection}` |
 | `Retrieval` | `EmbeddingModel`, `VectorStore` (`InMemory` / `Qdrant`), `Qdrant.{Host,Port,Collection,VectorSize}` |
 | `Moderation` | `Provider` (`None` / `AzureContentSafety`), `AzureEndpoint`, `MaxAllowedSeverity` |
 
@@ -109,7 +109,16 @@ src/EncryptedTouhid.CompleteAgent.Host/Prompts/
 ```
 
 ### Swap a backing store
-- **Conversations**: set `Persistence:ConversationStore=Sqlite` and update the connection string. Plug another provider by implementing `IConversationStore`.
+- **Conversations** — pick one of:
+  - `InMemory` (default, no extra config)
+  - `Sqlite` — `ConnectionString="Data Source=completeagent.db"`
+  - `SqlServer` / `AzureSql` — `ConnectionString="Server=...;Database=...;..."`
+  - `Postgres` — `ConnectionString="Host=...;Username=...;Password=...;Database=..."`
+  - `MySql` — `ConnectionString="Server=...;Database=...;Uid=...;Pwd=..."`
+  - `Cosmos` — `Cosmos.ConnectionString` *or* `Cosmos.AccountEndpoint` + `Cosmos.AccountKey`; container auto-created with `/conversationId` partition + TTL
+  - `Mongo` — `ConnectionString="mongodb://..."`; indexes auto-created (compound + TTL)
+
+  All backends share the same `IConversationStore` contract — implement it to add a custom backing. Audit log (`IAuditLog`) ships with matching impls for each.
 - **Vectors**: set `Retrieval:VectorStore=Qdrant` and supply the host/collection, or implement `IDocumentRetriever` for Pinecone / Azure AI Search / PgVector.
 - **Moderation**: set `Moderation:Provider=AzureContentSafety` and the endpoint, or implement `IContentModerator`.
 
@@ -162,10 +171,17 @@ See [`deploy/README.md`](deploy/README.md) for the full manifest tour and produc
 ## Tests
 
 ```bash
+# Default — unit tests only (no Docker required).
+dotnet test --filter "Category!=Integration"
+
+# Full — also runs Testcontainers-backed integration tests for SQL Server,
+# PostgreSQL, MySQL, Cosmos DB emulator, and MongoDB. Requires Docker.
 dotnet test
 ```
 
-28 unit tests cover prompt sanitisation, output guardrail, retry policy, retriever ranking, prompt evals, and runner null-checks.
+Unit suites cover prompt sanitisation, output guardrail, retry policy, retriever ranking, prompt evals, runner null-checks, options validation, infrastructure dispatch, and the in-memory + SQLite conversation stores.
+
+Integration suites in `tests/EncryptedTouhid.CompleteAgent.Infrastructure.IntegrationTests` exercise the conversation store contract against real containerised databases.
 
 ---
 
