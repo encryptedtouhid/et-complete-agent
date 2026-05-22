@@ -40,6 +40,25 @@ dotnet new uninstall EncryptedTouhid.AgentFramework.Templates
 The CI pipeline (`.github/workflows/ci.yml`) runs exactly this flow on every
 push and pull request.
 
+## Pre-commit hooks
+
+After cloning, activate the tracked hooks once:
+
+```bash
+./scripts/install-hooks.sh
+```
+
+This sets `core.hooksPath` to `.githooks/`. The `pre-commit` hook runs three
+gates in fail-fast order:
+
+1. `dotnet format --verify-no-changes` against the template source
+2. `dotnet pack` to verify the template still packs into a valid nupkg
+3. `dotnet new install` + `dotnet new et-complete-agent` + `dotnet build` +
+   `dotnet test` on a generated sample
+
+Bypass with `git commit --no-verify` only when you have a clear reason
+(e.g., committing intentionally broken state in a feature branch).
+
 ## Coding standards
 
 - **Layer hygiene** — `Domain` has no references; `Application` only references
