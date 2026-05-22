@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageId>ET.AgentFramework.Templates</PackageId>
+    <PackageId>EncryptedTouhid.AgentFramework.Templates</PackageId>
     <Title>Complete Agent With Microsoft Agent Framework</Title>
     <Authors>EncryptedTouhid</Authors>
     <Description>

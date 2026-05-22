@@ -6,6 +6,17 @@ All notable changes to this template are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-23
+
+### Changed
+- **NuGet package id renamed** from `ET.AgentFramework.Templates` to
+  `EncryptedTouhid.AgentFramework.Templates`. The old id is reserved by another
+  account on nuget.org and could not be published. Install command, badges,
+  CI workflow, and template identity GUID all updated to match. The generated
+  project's namespaces (`ET.<Name>.*`), the `dotnet new` short name
+  (`et-complete-agent`), and the Visual Studio template title are unchanged —
+  this only affects how the template is published and installed.
+
 ## [0.1.1] — 2026-05-23
 
 ### Fixed
@@ -26,7 +37,7 @@ All notable changes to this template are documented here. The format follows
 - VersionInfo DTO registered in the JSON source-gen context.
 
 ### Changed
-- `<Version>` removed from `ET.AgentFramework.Templates.csproj` — version now
+- `<Version>` removed from `EncryptedTouhid.AgentFramework.Templates.csproj` — version now
   flows entirely from git tags.
 
 ### Added
@@ -116,6 +127,7 @@ All notable changes to this template are documented here. The format follows
   (read-only FS, dropped caps, three probes), Service, HPA, NetworkPolicy,
   optional Aspire Dashboard, Kustomization.
 
-[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/EncryptedTouhid/et-complete-agent/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/EncryptedTouhid/et-complete-agent/releases/tag/v0.1.0

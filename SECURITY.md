@@ -22,7 +22,7 @@ You will receive an acknowledgement within **3 business days**. We aim to:
 
 In scope:
 
-- The template package itself (`ET.AgentFramework.Templates`)
+- The template package itself (`EncryptedTouhid.AgentFramework.Templates`)
 - The code shipped under `content/CompleteAgent/` that ends up in users'
   generated projects
 - The bundled `Dockerfile`, `docker-compose.yml`, and Kubernetes manifests

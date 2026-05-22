@@ -30,11 +30,11 @@ Open an issue first if you're unsure.
 ```bash
 # Build the template and a sample project from it
 dotnet pack -c Release -o ./artifacts
-dotnet new install ./artifacts/ET.AgentFramework.Templates.0.1.0.nupkg --force
+dotnet new install ./artifacts/EncryptedTouhid.AgentFramework.Templates.0.1.0.nupkg --force
 rm -rf /tmp/Demo
 dotnet new et-complete-agent -n Demo -o /tmp/Demo
 (cd /tmp/Demo && dotnet build && dotnet test)
-dotnet new uninstall ET.AgentFramework.Templates
+dotnet new uninstall EncryptedTouhid.AgentFramework.Templates
 ```
 
 The CI pipeline (`.github/workflows/ci.yml`) runs exactly this flow on every

@@ -28,7 +28,7 @@ jobs:
 
       - name: Capture nupkg path
         id: pkg
-        run: echo "nupkg=$(ls artifacts/ET.AgentFramework.Templates.*.nupkg | head -1)" >> "$GITHUB_OUTPUT"
+        run: echo "nupkg=$(ls artifacts/EncryptedTouhid.AgentFramework.Templates.*.nupkg | head -1)" >> "$GITHUB_OUTPUT"
 
       - name: Install template from local nupkg
         run: dotnet new install "${{ steps.pkg.outputs.nupkg }}"
@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nupkg
-          path: artifacts/ET.AgentFramework.Templates.*.nupkg
+          path: artifacts/EncryptedTouhid.AgentFramework.Templates.*.nupkg
           retention-days: 30
 
   publish:
@@ -78,7 +78,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          dotnet nuget push "artifacts/ET.AgentFramework.Templates.*.nupkg" \
+          dotnet nuget push "artifacts/EncryptedTouhid.AgentFramework.Templates.*.nupkg" \
               --source https://api.nuget.org/v3/index.json \
               --api-key "$NUGET_API_KEY" \
               --skip-duplicate

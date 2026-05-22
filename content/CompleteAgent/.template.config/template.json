@@ -9,7 +9,7 @@
     "OpenAI",
     "Clean Architecture"
   ],
-  "identity": "ET.AgentFramework.Templates.CompleteAgent.CSharp",
+  "identity": "EncryptedTouhid.AgentFramework.Templates.CompleteAgent.CSharp",
   "name": "Complete Agent With Microsoft Agent Framework",
   "shortName": "et-complete-agent",
   "description": "Production-grade Microsoft Agent Framework solution with Clean Architecture, DI, options pattern, versioned prompts, prompt-injection mitigation, function tools, a workflow, DevUI hosting, analyzers and tests.",

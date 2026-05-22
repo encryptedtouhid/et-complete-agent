@@ -1,9 +1,9 @@
 # Complete Agent — Microsoft Agent Framework Template
 
 [![CI](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml)
-[![NuGet version](https://img.shields.io/nuget/v/ET.AgentFramework.Templates.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
-[![NuGet pre-release](https://img.shields.io/nuget/vpre/ET.AgentFramework.Templates.svg?logo=nuget&label=pre-release&color=orange)](https://www.nuget.org/packages/ET.AgentFramework.Templates/absoluteLatest)
-[![NuGet downloads](https://img.shields.io/nuget/dt/ET.AgentFramework.Templates.svg?label=downloads&color=informational)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
+[![NuGet version](https://img.shields.io/nuget/v/EncryptedTouhid.AgentFramework.Templates.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/EncryptedTouhid.AgentFramework.Templates)
+[![NuGet pre-release](https://img.shields.io/nuget/vpre/EncryptedTouhid.AgentFramework.Templates.svg?logo=nuget&label=pre-release&color=orange)](https://www.nuget.org/packages/EncryptedTouhid.AgentFramework.Templates/absoluteLatest)
+[![NuGet downloads](https://img.shields.io/nuget/dt/EncryptedTouhid.AgentFramework.Templates.svg?label=downloads&color=informational)](https://www.nuget.org/packages/EncryptedTouhid.AgentFramework.Templates)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4.svg?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
 
@@ -11,7 +11,7 @@ A production-grade `dotnet new` template for building AI agents on **Microsoft A
 
 Generates a Clean-Architecture solution with everything a real deployment needs: dependency injection, validated configuration, versioned prompts, function tools, RAG, conversation memory, content moderation, cost budgeting, JWT + API-key auth, distributed rate limiting, OpenTelemetry, retries, health checks, structured JSON output, streaming, plus Docker and Kubernetes manifests.
 
-- **Package ID** `ET.AgentFramework.Templates`
+- **Package ID** `EncryptedTouhid.AgentFramework.Templates`
 - **Short name** `et-complete-agent`
 - **Target framework** `net10.0`
 - **License** MIT
@@ -23,7 +23,7 @@ Generates a Clean-Architecture solution with everything a real deployment needs:
 
 ```bash
 # 1. Install the template
-dotnet new install ET.AgentFramework.Templates
+dotnet new install EncryptedTouhid.AgentFramework.Templates
 
 # 2. Generate a new solution
 dotnet new et-complete-agent -n CompleteAgent
@@ -204,14 +204,14 @@ Bundled manifests: `namespace`, `configmap`, `secret.example`, `deployment` (non
 dotnet pack -c Release -o ./artifacts
 
 # Install from local nupkg
-dotnet new install ./artifacts/ET.AgentFramework.Templates.0.1.0.nupkg
+dotnet new install ./artifacts/EncryptedTouhid.AgentFramework.Templates.0.1.0.nupkg
 
 # Generate a sample and smoke-test
 dotnet new et-complete-agent -n Demo -o /tmp/Demo
 (cd /tmp/Demo && dotnet build && dotnet test)
 
 # Uninstall when iterating
-dotnet new uninstall ET.AgentFramework.Templates
+dotnet new uninstall EncryptedTouhid.AgentFramework.Templates
 ```
 
 CI runs the same pack → install → generate → build → test flow on every push (`.github/workflows/ci.yml`).
