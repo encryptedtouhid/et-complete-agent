@@ -1,0 +1,17 @@
+**/bin
+**/obj
+**/out
+**/.vs
+**/.idea
+**/.vscode
+**/*.user
+**/TestResults
+**/coverage
+**/appsettings.Development.json
+**/secrets.json
+*.env
+.env*
+.git
+.github
+*.md
+!README.md

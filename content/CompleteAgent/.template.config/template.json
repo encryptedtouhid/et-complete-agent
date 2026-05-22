@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "EncryptedTouhid",
+  "classifications": [
+    "AI",
+    "Agent",
+    "Microsoft Agent Framework",
+    "Azure OpenAI",
+    "OpenAI",
+    "Clean Architecture"
+  ],
+  "identity": "ET.AgentFramework.Templates.CompleteAgent.CSharp",
+  "name": "Complete Agent With Microsoft Agent Framework",
+  "shortName": "et-complete-agent",
+  "description": "Production-grade Microsoft Agent Framework solution with Clean Architecture, DI, options pattern, versioned prompts, prompt-injection mitigation, function tools, a workflow, DevUI hosting, analyzers and tests.",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sourceName": "CompleteAgent",
+  "preferNameDirectory": true,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "net10.0",
+      "replaces": "net10.0",
+      "choices": [
+        { "choice": "net10.0", "description": ".NET 10" }
+      ]
+    },
+    "skipRestore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Skip dotnet restore after project creation."
+    }
+  },
+  "primaryOutputs": [
+    { "path": "CompleteAgent.sln" }
+  ],
+  "postActions": [
+    {
+      "id": "restore",
+      "condition": "(!skipRestore)",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [ { "text": "Run 'dotnet restore'" } ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ],
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "**/.vs/**",
+            "**/*.user"
+          ]
+        }
+      ]
+    }
+  ]
+}

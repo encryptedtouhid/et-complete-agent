@@ -1,0 +1,30 @@
+# Build output
+**/bin/
+**/obj/
+**/out/
+**/artifacts/
+*.nupkg
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test results
+**/TestResults/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# Secrets — never commit
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/secrets.json
+*.env
+.env*

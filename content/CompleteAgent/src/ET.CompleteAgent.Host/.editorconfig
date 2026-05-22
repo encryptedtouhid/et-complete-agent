@@ -1,0 +1,8 @@
+root = false
+
+[*.cs]
+# Composition-root types (middleware, options, health checks, hosted services) are
+# instantiated via DI reflection. CA1812 cannot track those call sites, so it fires
+# false-positives on every legitimate internal DI-only type in the Host project.
+# Rule remains active in Domain / Application / Infrastructure.
+dotnet_diagnostic.CA1812.severity = none

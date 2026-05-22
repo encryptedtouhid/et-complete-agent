@@ -1,0 +1,14 @@
+root = false
+
+[*.cs]
+# Test method naming convention (xUnit/NUnit) uses underscores intentionally.
+dotnet_diagnostic.CA1707.severity = none
+
+# Tests don't need public-API argument null-checks; the test runner controls inputs.
+dotnet_diagnostic.CA1062.severity = none
+
+# Test fixtures often use literal strings without CultureInfo — not a real risk.
+dotnet_diagnostic.CA1305.severity = none
+
+# xUnit Assert.* overloads without StringComparison are the canonical form in tests.
+dotnet_diagnostic.CA1307.severity = none

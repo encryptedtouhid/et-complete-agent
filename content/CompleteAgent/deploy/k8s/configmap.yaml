@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: completeagent-config
+  namespace: completeagent
+data:
+  ASPNETCORE_ENVIRONMENT: Production
+  COMPLETEAGENT_Agent__Provider: AzureOpenAI
+  COMPLETEAGENT_Agent__Model: gpt-4o-mini
+  COMPLETEAGENT_Telemetry__ServiceName: complete-agent
+  COMPLETEAGENT_Telemetry__OtlpEndpoint: http://otel-collector:4317
+  COMPLETEAGENT_RateLimit__Store: Redis
+  COMPLETEAGENT_RateLimit__PermitLimit: "60"
+  COMPLETEAGENT_RateLimit__WindowSeconds: "60"
+  COMPLETEAGENT_Persistence__ConversationStore: Sqlite
+  COMPLETEAGENT_Retrieval__VectorStore: Qdrant
+  COMPLETEAGENT_Retrieval__Qdrant__Host: qdrant
+  COMPLETEAGENT_Retrieval__Qdrant__Port: "6334"

@@ -1,0 +1,23 @@
+**/bin/
+**/obj/
+**/out/
+**/.vs/
+**/.vscode/
+**/.idea/
+*.user
+*.suo
+
+.DS_Store
+Thumbs.db
+
+**/TestResults/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# Secrets — never commit
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/secrets.json
+*.env
+.env*
