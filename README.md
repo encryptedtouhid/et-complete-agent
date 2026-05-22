@@ -1,5 +1,11 @@
 # Complete Agent — Microsoft Agent Framework Template
 
+[![CI](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/ET.AgentFramework.Templates.svg?logo=nuget)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
+[![Downloads](https://img.shields.io/nuget/dt/ET.AgentFramework.Templates.svg?color=informational)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4.svg?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
+
 A production-grade `dotnet new` template for building AI agents on **Microsoft Agent Framework** in .NET 10.
 
 Generates a Clean-Architecture solution with everything a real deployment needs: dependency injection, validated configuration, versioned prompts, function tools, RAG, conversation memory, content moderation, cost budgeting, JWT + API-key auth, distributed rate limiting, OpenTelemetry, retries, health checks, structured JSON output, streaming, plus Docker and Kubernetes manifests.
@@ -8,6 +14,7 @@ Generates a Clean-Architecture solution with everything a real deployment needs:
 - **Short name** `et-complete-agent`
 - **Target framework** `net10.0`
 - **License** MIT
+- **Contributing** see [CONTRIBUTING.md](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
 
 ---
 
