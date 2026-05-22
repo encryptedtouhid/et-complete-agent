@@ -1,8 +1,9 @@
 # Complete Agent — Microsoft Agent Framework Template
 
-[![CI](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/ET.AgentFramework.Templates.svg?logo=nuget)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
-[![Downloads](https://img.shields.io/nuget/dt/ET.AgentFramework.Templates.svg?color=informational)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
+[![CI](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EncryptedTouhid/et-complete-agent/actions/workflows/ci.yml)
+[![NuGet version](https://img.shields.io/nuget/v/ET.AgentFramework.Templates.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
+[![NuGet pre-release](https://img.shields.io/nuget/vpre/ET.AgentFramework.Templates.svg?logo=nuget&label=pre-release&color=orange)](https://www.nuget.org/packages/ET.AgentFramework.Templates/absoluteLatest)
+[![NuGet downloads](https://img.shields.io/nuget/dt/ET.AgentFramework.Templates.svg?label=downloads&color=informational)](https://www.nuget.org/packages/ET.AgentFramework.Templates)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4.svg?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
 

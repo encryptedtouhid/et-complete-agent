@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
@@ -10,10 +11,12 @@ permissions:
   contents: read
 
 jobs:
-  pack-and-smoke-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # MinVer requires the full history to find tags
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -23,8 +26,12 @@ jobs:
       - name: Pack template
         run: dotnet pack -c Release -o ./artifacts
 
+      - name: Capture nupkg path
+        id: pkg
+        run: echo "nupkg=$(ls artifacts/ET.AgentFramework.Templates.*.nupkg | head -1)" >> "$GITHUB_OUTPUT"
+
       - name: Install template from local nupkg
-        run: dotnet new install ./artifacts/ET.AgentFramework.Templates.0.1.0.nupkg
+        run: dotnet new install "${{ steps.pkg.outputs.nupkg }}"
 
       - name: Generate sample project
         run: dotnet new et-complete-agent -n SmokeTest -o /tmp/SmokeTest
@@ -40,3 +47,38 @@ jobs:
       - name: Test generated project
         working-directory: /tmp/SmokeTest
         run: dotnet test --no-build -c Release
+
+      - name: Upload nupkg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: artifacts/ET.AgentFramework.Templates.*.nupkg
+          retention-days: 30
+
+  publish:
+    name: Publish to NuGet
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: nuget
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Pack
+        run: dotnet pack -c Release -o ./artifacts
+
+      - name: Push to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "artifacts/ET.AgentFramework.Templates.*.nupkg" \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key "$NUGET_API_KEY" \
+              --skip-duplicate
