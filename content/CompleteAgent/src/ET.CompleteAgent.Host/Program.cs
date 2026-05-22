@@ -98,5 +98,6 @@ app.MapHealthChecks("/readyz", new Microsoft.AspNetCore.Diagnostics.HealthChecks
 });
 
 app.MapAgentEndpoints();
+app.MapVersionEndpoint();
 
 await app.RunAsync();

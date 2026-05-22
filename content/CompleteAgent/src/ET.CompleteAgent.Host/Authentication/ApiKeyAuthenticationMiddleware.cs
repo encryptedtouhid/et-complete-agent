@@ -6,7 +6,7 @@ namespace ET.CompleteAgent.Host.Authentication;
 
 internal sealed class ApiKeyAuthenticationMiddleware : IMiddleware
 {
-    private static readonly string[] BypassPaths = ["/healthz", "/readyz", "/openapi", "/scalar"];
+    private static readonly string[] BypassPaths = ["/healthz", "/readyz", "/openapi", "/scalar", "/version"];
 
     private readonly byte[][] _expectedKeys;
 

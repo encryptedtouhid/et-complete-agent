@@ -7,6 +7,21 @@ All notable changes to this template are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- **Automatic SemVer from git tags** via MinVer in both the template package
+  and every project in the generated solution. Tag `v1.2.3` produces a
+  `1.2.3` build; pre-tag builds emit `0.0.0-alpha.0`. `MinVerAutoIncrement`
+  is `minor` by default, `MinVerTagPrefix` is `v`.
+- **Source Link** with embedded sources and symbols on the template package
+  itself so consumers can step into the template's own code in their debugger.
+- **`/version` endpoint** exposing AssemblyInformationalVersion, parsed commit
+  SHA, dirty-flag, and environment. Auth-bypassed alongside `/healthz`.
+- VersionInfo DTO registered in the JSON source-gen context.
+
+### Changed
+- `<Version>` removed from `ET.AgentFramework.Templates.csproj` — version now
+  flows entirely from git tags.
+
+### Added
 - Security headers middleware (HSTS, X-Content-Type-Options, X-Frame-Options,
   Referrer-Policy, Permissions-Policy, Content-Security-Policy). HSTS only
   emits over HTTPS; all settings tunable via `SecurityHeaders` config.

@@ -60,6 +60,10 @@
     <!-- Content safety -->
     <PackageVersion Include="Azure.AI.ContentSafety" Version="1.0.0" />
 
+    <!-- Versioning + Source Link -->
+    <PackageVersion Include="MinVer" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.300" />
+
     <!-- Analyzers -->
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.26.0.140279" />

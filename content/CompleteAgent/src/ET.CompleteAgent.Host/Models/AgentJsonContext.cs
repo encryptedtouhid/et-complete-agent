@@ -7,5 +7,6 @@ namespace ET.CompleteAgent.Host.Models;
 [JsonSerializable(typeof(AgentInvokeResponse))]
 [JsonSerializable(typeof(AgentErrorResponse))]
 [JsonSerializable(typeof(SentimentClassification))]
+[JsonSerializable(typeof(VersionInfo))]
 [JsonSerializable(typeof(string))]
 internal sealed partial class AgentJsonContext : JsonSerializerContext;

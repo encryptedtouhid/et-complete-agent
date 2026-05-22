@@ -14,12 +14,40 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!--
+      Versioning. MinVer derives AssemblyVersion / FileVersion / InformationalVersion
+      from the nearest git tag with the prefix below:
+        git tag v1.0.0          -> 1.0.0
+        git tag v1.2.0-rc.1     -> 1.2.0-rc.1
+      Before any tag exists the build emits 0.0.0-alpha.0 so a fresh `dotnet new`
+      project still builds. Run `git init && git add . && git commit && git tag v0.1.0`
+      to lock in your first real version.
+    -->
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerAutoIncrement>minor</MinVerAutoIncrement>
+
+    <!-- Source Link: embed source references so consumers can debug into your code. -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Assembly attributes derived from MinVer + product metadata. -->
+    <Product>Complete Agent</Product>
+    <Company>EncryptedTouhid</Company>
+    <Copyright>Copyright (c) $([System.DateTime]::UtcNow.Year) EncryptedTouhid</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
     <PackageReference Include="SonarAnalyzer.CSharp" PrivateAssets="all" />
     <PackageReference Include="SecurityCodeScan.VS2019" PrivateAssets="all" />
+    <PackageReference Include="MinVer" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
